@@ -13,15 +13,29 @@
 <header>
     <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="#">LMS</a>
-        {% if current_user.is_authenticated %}
+        {% if language == "ru" %}
+            <p><a class="btn btn-primary " href="/language?language=ru">Change Language</a></p>
+            {% if current_user.is_authenticated %}
             <a class="navbar-brand">{{ current_user.name }}</a>
             <a class="btn btn-danger" href="/logout">Выйти</a>
-        {% else %}
-            <p>
+            {% else %}
+                <p>
                 <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
                 <a class="btn btn-success" href="/login">Войти</a>
-            </p>
-{% endif %}
+                </p>
+            {% endif %}
+        {% else %}
+            <p><a class="btn btn-primary " href="/language?language=en">Сменить Язык</a></p>
+            {% if current_user.is_authenticated %}
+            <a class="navbar-brand">{{ current_user.name }}</a>
+            <a class="btn btn-danger" href="/logout">Log out</a>
+            {% else %}
+                <p>
+                <a class="btn btn-primary " href="/register">Sign In</a>
+                <a class="btn btn-success" href="/login">Log In</a>
+                </p>
+            {% endif %}
+        {% endif %}
     </nav>
 </header>
 <!-- Begin page content -->

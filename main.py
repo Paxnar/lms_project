@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, jsonify, make_response
+from flask import Flask, render_template, redirect, request, jsonify, make_response, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post
 from werkzeug.exceptions import abort
@@ -62,10 +62,21 @@ def logout():
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("base.html")
+    if request.args.get('language') is None:
+        return render_template("base.html", title='LMS', language='ru')
+    return render_template("base.html", title='LMS', language=request.args.get('language'))
     '''db_sess = db_session.create_session()
     news = db_sess.query(Jobs).all()
     return render_template("index.html", news=news)'''
+
+
+@app.route('/language')
+def change_language():
+    if request.args.get('language') == 'ru':
+        language = 'en'
+    else:
+        language = 'ru'
+    return redirect(f'/?language={language}')
 
 
 def main():
