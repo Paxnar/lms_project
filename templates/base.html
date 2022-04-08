@@ -20,7 +20,7 @@
             <a class="btn btn-danger" href="/logout">Выйти</a>
             {% else %}
                 <p>
-                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                <a class="btn btn-primary " href="/register?language={{ language }}">Зарегистрироваться</a>
                 <a class="btn btn-success" href="/login">Войти</a>
                 </p>
             {% endif %}
@@ -41,6 +41,7 @@
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
+    <a class="btn btn-success" href="https://www.youtube.com/channel/UCFvfQ38TD4IHuAcy9zKHhhg">Fuck</a>
 </main>
 </body>
 </html>

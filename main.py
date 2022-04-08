@@ -62,6 +62,10 @@ def logout():
 @app.route('/')
 @app.route('/index')
 def index():
+    if current_user.is_authenticated:
+        print(current_user.name)
+    else:
+        print('nah')
     if request.args.get('language') is None:
         return render_template("base.html", title='LMS', language='ru')
     return render_template("base.html", title='LMS', language=request.args.get('language'))
