@@ -1,3 +1,4 @@
+import requests.exceptions
 from flask import Flask, render_template, redirect, request, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post
@@ -43,13 +44,18 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm()
-    if form.validate_on_submit():
-        post('http://localhost:5000/api/user',
-             json={'email': form.email.data, 'name': form.name.data, 'password': form.password.data}).json()
-        return redirect('/login')
-    return render_template('register.html', title='Регистрация',
-                           form=form)
+    if request.method == 'GET':
+        return render_template('reg_log.html')
+    elif request.method == 'POST':
+        try:
+            post('http://localhost:5000/api/user',
+                 json={'email': request.form['emails'], 'name': request.form['txts'], 'password': request.form['pswds']}).json()
+            return "you signed up successfully"
+        except:
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.email == request.form['emaill']).first()
+            if user and user.check_password(request.form['pswdl']):
+                return redirect("/")
 
 
 @app.route('/logout')
