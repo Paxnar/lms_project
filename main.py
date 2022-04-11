@@ -3,7 +3,6 @@ from flask import Flask, render_template, redirect, request, jsonify, make_respo
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post
 from werkzeug.exceptions import abort
-
 from forms.user import RegisterForm
 from data.users import User, LoginForm
 from data import db_session
@@ -35,7 +34,9 @@ def login():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == request.form['email']).first()
         if user and user.check_password(request.form['pasw']):
-            return redirect("/")
+            login_user(user, remember=True)
+            return redirect('/')
+        return render_template('login.html', message='Неправильный логин или пароль!')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -43,9 +44,16 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
     elif request.method == 'POST':
+        if request.form['pasw'] != request.form['paswag']:
+            return render_template('register.html', message='Пароли не совпадают')
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == request.form['email']).first():
+            return render_template('register.html', message="Такой пользователь уже есть!")
         post('http://localhost:5000/api/user',
-             json={'email': request.form['email'], 'name': request.form['username'], 'password': request.form['pasw']}).json()
-        return redirect("/")
+             json={'email': request.form['email'], 'name': request.form['username'],
+                   'password': request.form['pasw']}).json()
+        return redirect("/login")
+
 
 @app.route('/logout')
 @login_required
