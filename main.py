@@ -29,34 +29,23 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
         db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
+        user = db_sess.query(User).filter(User.email == request.form['email']).first()
+        if user and user.check_password(request.form['pasw']):
             return redirect("/")
-        return render_template('login.html',
-                               message="Неправильный логин или пароль",
-                               form=form)
-    return render_template('login.html', title='Авторизация', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('reg_log.html')
+        return render_template('register.html')
     elif request.method == 'POST':
-        try:
-            post('http://localhost:5000/api/user',
-                 json={'email': request.form['emails'], 'name': request.form['txts'], 'password': request.form['pswds']}).json()
-            return "you signed up successfully"
-        except:
-            db_sess = db_session.create_session()
-            user = db_sess.query(User).filter(User.email == request.form['emaill']).first()
-            if user and user.check_password(request.form['pswdl']):
-                return redirect("/")
-
+        post('http://localhost:5000/api/user',
+             json={'email': request.form['email'], 'name': request.form['username'], 'password': request.form['pasw']}).json()
+        return redirect("/")
 
 @app.route('/logout')
 @login_required
