@@ -3,7 +3,6 @@ from flask import Flask, render_template, redirect, request, jsonify, make_respo
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post
 from werkzeug.exceptions import abort
-from forms.user import RegisterForm
 from data.users import User, LoginForm
 from data import db_session
 from api import user_api
