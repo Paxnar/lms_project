@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+
+    <title>Document</title>
+</head>
+<body>
+    <header id="hed">
+        <div>
+            <img id="header-icon" src="{{url_for('static', filename='images/lms_icon.png')}}" alt="">
+        </div>
+        <div id="lng_buts">
+            <a class="lng_but_act" >Python</a>
+            <a class="lng_but_nonact" >HTML5</a>
+            <a class="lng_but_nonact" >CSS3</a>
+            <a class="lng_but_nonact" >JS</a>
+            <a class="lng_but_nonact" >more</a>
+        </div>
+        {% if current_user.is_authenticated %} <!--Я сделал эту конструкцию если что переделаешь-->
+            <div class="user_prof">
+                <a href="/profile" class="username"></a>
+                <li><a href="/profile" class="prof_icon"><img src="/images/profile_icon.png" alt="" class="prof_icon"></a></li>
+            </div>
+        {% else %}
+            <div class="ls_buts">
+                <a href="/register" class="lin_sup" id="sup">Зарегистрироваться</a>
+                <a href="/login" class="lin_sup" id="lin">Войти</a>
+            </div>
+        {% endif %}
+    </header>
+    <main class="main">
+        <nav class="menu">
+            <ul>
+                <li><a href="/" class="nav_icons"><img src="{{url_for('static', filename='/images/navbar_home_icon_act.png')}}" alt="" class="nav_icons nav_home"></a></li>
+                <li><a href="/" class="nav_icons"><img src="{{url_for('static', filename='/images/navbar_edit_icon_nonact.png')}}" alt="" class="nav_icons nav_edit"></a></li>
+                <li><a href="/" class="nav_icons"><img src="{{url_for('static', filename='/images/navbar_les_icon_nonact.png')}}" alt="" class="nav_icons nav_les"></a></li>
+            </ul>
+        </nav>
+    </main>
+</body>
+</html>

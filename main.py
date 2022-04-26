@@ -29,26 +29,26 @@ def load_user(user_id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('lms_html/user/login.html')
     elif request.method == 'POST':
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == request.form['email']).first()
         if user and user.check_password(request.form['pasw']):
             login_user(user, remember=True)
             return redirect('/')
-        return render_template('login.html', message='Неправильный логин или пароль!')
+        return render_template('lms_html/user/login.html', message='Неправильный логин или пароль!')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        return render_template('lms_html/user/signup.html')
     elif request.method == 'POST':
         if request.form['pasw'] != request.form['paswag']:
-            return render_template('register.html', message='Пароли не совпадают')
+            return render_template('lms_html/user/signup.html', message='Пароли не совпадают')
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == request.form['email']).first():
-            return render_template('register.html', message="Такой пользователь уже есть!")
+            return render_template('lms_html/user/signup.html', message="Такой пользователь уже есть!")
         post('http://localhost:5000/api/user',
              json={'email': request.form['email'], 'name': request.form['username'],
                    'password': request.form['pasw']}).json()
@@ -65,10 +65,14 @@ def logout():
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("base.html")
-    '''db_sess = db_session.create_session()
-    news = db_sess.query(Jobs).all()
-    return render_template("index.html", news=news)'''
+    return render_template("lms_html/index.html")
+
+
+@app.route('/profile')
+def profile():
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    return render_template('lms_html/profile/profile.html')
 
 
 def main():
