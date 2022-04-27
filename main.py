@@ -82,7 +82,7 @@ def index():
         db_sess = db_session.create_session()
         image = db_sess.query(ProfileImage).filter(ProfileImage.id == current_user.profile_image).first()
         return render_template("lms_html/index.html", pfp=base64.b64encode(image.data).decode())
-    return render_template("lms_html/index.html", pfp='hi')
+    return render_template("lms_html/index.html")
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -90,7 +90,9 @@ def profile():
     if not current_user.is_authenticated:
         return redirect('/login')
     if request.method == 'GET':
-        return render_template('lms_html/profile/profile.html')
+        db_sess = db_session.create_session()
+        image = db_sess.query(ProfileImage).filter(ProfileImage.id == current_user.profile_image).first()
+        return render_template('lms_html/profile/profile.html', pfp=base64.b64encode(image.data).decode())
     elif request.method == 'POST':
         jsons = {'user': current_user.id}
         for i in request.form:

@@ -8,7 +8,7 @@ class ProfileImage(SqlAlchemyBase, UserMixin):
     __tablename__ = 'profiles'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    data = sqlalchemy.Column(sqlalchemy.BLOB, unique=True)
+    data = sqlalchemy.Column(sqlalchemy.BLOB)
     user = orm.relation("User", back_populates='profile_relation')
 
     def __repr__(self):
