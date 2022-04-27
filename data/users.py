@@ -19,6 +19,8 @@ class User(SqlAlchemyBase, UserMixin):
     surname = sqlalchemy.Column(sqlalchemy.String)
     name = sqlalchemy.Column(sqlalchemy.String)
     phone = sqlalchemy.Column(sqlalchemy.String)
+    country = sqlalchemy.Column(sqlalchemy.String)
+    language = sqlalchemy.Column(sqlalchemy.String)
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'

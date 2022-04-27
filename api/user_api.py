@@ -21,6 +21,10 @@ def edit_user():
         user.email = request.json['email']
     if 'phone' in request.json:
         user.phone = request.json['phone']
+    if 'language' in request.json:
+        user.language = request.json['language']
+    if 'country' in request.json:
+        user.country = request.json['country']
     db_sess.add(user)
     db_sess.commit()
     return jsonify({'success': 'OK'})
