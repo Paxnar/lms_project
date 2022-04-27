@@ -1,8 +1,9 @@
 import flask
 from flask import request, jsonify
-
+from data.defaultpfp import defaultprofile
 from data import db_session
 from data.users import User
+from data.profiles import ProfileImage
 
 blueprint = flask.Blueprint('user_api', __name__, template_folder='templates')
 
@@ -44,6 +45,7 @@ def register_user():
         name=request.json['name']
     )
     user.set_password(request.json['password'])
+    user.profile_image = 1
     db_sess.add(user)
     db_sess.commit()
     return jsonify({'success': 'OK'})

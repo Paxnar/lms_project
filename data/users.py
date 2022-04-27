@@ -21,6 +21,8 @@ class User(SqlAlchemyBase, UserMixin):
     phone = sqlalchemy.Column(sqlalchemy.String)
     country = sqlalchemy.Column(sqlalchemy.String)
     language = sqlalchemy.Column(sqlalchemy.String)
+    profile_image = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("profiles.id"))
+    profile_relation = orm.relation('ProfileImage')
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'

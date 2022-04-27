@@ -23,7 +23,7 @@
         {% if current_user.is_authenticated %} <!--Я сделал эту конструкцию если что переделаешь-->
             <div class="user_prof">
                 <a href="/profile" class="username"></a>
-                <li><a href="/profile" class="prof_icon"><img src="/images/profile_icon.png" alt="" class="prof_icon"></a></li>
+                <li><a href="/profile" class="prof_icon"><img src="data:image/png;base64,{{ pfp }}" alt="" class="prof_icon"></a></li>
                 <li><a href="/logout" class="lin_sup" style=";;;;;;;;display: flex;
 align-items: center;">Выйти</a></li>
             </div>

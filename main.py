@@ -1,10 +1,14 @@
-import requests.exceptions
+import base64
+import io
+import PIL.Image as Image
+
 from flask import Flask, render_template, redirect, request, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post
 from werkzeug.exceptions import abort
-from forms.user import RegisterForm
-from data.users import User, LoginForm
+from data.defaultpfp import defaultprofile
+from data.users import User
+from data.profiles import ProfileImage
 from data import db_session
 from api import user_api
 
@@ -62,10 +66,23 @@ def logout():
     return redirect("/")
 
 
+@app.route('/images/profiles/<id>')
+def load_profile(id):
+    db_sess = db_session.create_session()
+    image = db_sess.query(ProfileImage).filter(ProfileImage.id == id).first()
+
+    return '''<html><head></head><body style="background: gray;"><img src="data:image/png;base64,''' + \
+           f'''{base64.b64encode(image.data).decode()}"></body></html>'''
+
+
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("lms_html/index.html")
+    if current_user.is_authenticated:
+        db_sess = db_session.create_session()
+        image = db_sess.query(ProfileImage).filter(ProfileImage.id == current_user.profile_image).first()
+        return render_template("lms_html/index.html", pfp=base64.b64encode(image.data).decode())
+    return render_template("lms_html/index.html", pfp='hi')
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -88,6 +105,12 @@ def profile():
 def main():
     db_session.global_init("db/users.db")
     app.register_blueprint(user_api.blueprint)
+    db_sess = db_session.create_session()
+    image = db_sess.query(ProfileImage).filter(ProfileImage.id == 1).first()
+    if not image:
+        profileimage = ProfileImage(data=defaultprofile)
+        db_sess.add(profileimage)
+        db_sess.commit()
     app.run()
 
 
