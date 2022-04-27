@@ -68,11 +68,21 @@ def index():
     return render_template("lms_html/index.html")
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if not current_user.is_authenticated:
         return redirect('/login')
-    return render_template('lms_html/profile/profile.html')
+    if request.method == 'GET':
+        return render_template('lms_html/profile/profile.html')
+    elif request.method == 'POST':
+        jsons = {'user': current_user.id}
+        for i in request.form:
+            if request.form[i] == '':
+                continue
+            jsons[i] = request.form[i]
+        post('http://localhost:5000/api/user_edit',
+             json=jsons).json()
+        return redirect("/")
 
 
 def main():

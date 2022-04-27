@@ -18,6 +18,7 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     surname = sqlalchemy.Column(sqlalchemy.String)
     name = sqlalchemy.Column(sqlalchemy.String)
+    phone = sqlalchemy.Column(sqlalchemy.String)
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'
