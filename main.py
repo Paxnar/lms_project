@@ -116,7 +116,7 @@ def profile():
                         only=('email', 'name', 'surname', 'phone', 'country', 'language')))
         jsons = {'user': current_user.id}
         for i in request.form:
-            if request.form[i] == '':
+            if request.form[i] == '' and (i == 'name' or i == 'email'):
                 continue
             jsons[i] = request.form[i]
         post('http://localhost:5000/api/user_edit',
