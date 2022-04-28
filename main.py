@@ -4,7 +4,7 @@ import PIL.Image as Image
 
 from flask import Flask, render_template, redirect, request, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from requests import post
+from requests import post, get
 from werkzeug.exceptions import abort
 from data.defaultpfp import defaultprofile
 from data.users import User
@@ -92,8 +92,28 @@ def profile():
     if request.method == 'GET':
         db_sess = db_session.create_session()
         image = db_sess.query(ProfileImage).filter(ProfileImage.id == current_user.profile_image).first()
-        return render_template('lms_html/profile/profile.html', pfp=base64.b64encode(image.data).decode())
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+        return render_template('lms_html/profile/profile.html',
+                               pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(), form=user.to_dict(
+                only=('email', 'name', 'surname', 'phone', 'country', 'language')))
     elif request.method == 'POST':
+        if 'pfpupload' in request.form:
+            pfp = request.files['pfpimg'].stream.read()
+            if pfp != b'':
+                db_sess = db_session.create_session()
+                pi = ProfileImage(data=pfp)
+                db_sess.add(pi)
+                usr = db_sess.query(User).filter(User.id == current_user.id).first()
+                usr.profile_image = pi.id
+                db_sess.add(usr)
+                db_sess.commit()
+                post('http://localhost:5000/api/user_edit',
+                     json={'user': current_user.id, 'profile_image': pi.id}).json()
+                image = db_sess.query(ProfileImage).filter(ProfileImage.id == pi.id).first()
+                user = db_sess.query(User).filter(User.id == current_user.id).first()
+                return render_template('lms_html/profile/profile.html',
+                                       pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(), form=user.to_dict(
+                        only=('email', 'name', 'surname', 'phone', 'country', 'language')))
         jsons = {'user': current_user.id}
         for i in request.form:
             if request.form[i] == '':
