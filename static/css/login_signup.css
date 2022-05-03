@@ -5,12 +5,19 @@ body {
     justify-content: center;
     height: 100vh;
   }
-  
+
+  .message {
+  color: #f00;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+  }
+
   .form {
     background-color: #15172b;
     border-radius: 20px;
     box-sizing: border-box;
-    height: 500px;
     padding: 20px;
     width: 320px;
   }
