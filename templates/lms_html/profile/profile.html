@@ -3,6 +3,7 @@
     <head>
         <meta charset='utf-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="shortcut icon" href="static/images/lms_icon.png" type="image/png">
         <title>Learnfull - Редактирование профиля</title>
         <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
         <link href="{{url_for('static', filename='css/profile_style.css')}}" rel='stylesheet'>
@@ -23,8 +24,8 @@
             <form action="" method="post" id="formprofile">
             <div class="py-2">
                 <div class="row py-2">
-                    <div class="col-md-6"> <label for="firstname">Имя</label> <input value='{{ form["name"] }}' name='name' type="text" class="bg-light form-control" placeholder="Артём"> </div>
-                    <div class="col-md-6 pt-md-0 pt-3"> <label for="lastname">Фамилия</label> <input value='{{ form["surname"] }}' name='surname' type="text" class="bg-light form-control" placeholder="Лиенко"> </div>
+                    <div class="col-md-6"> <label for="firstname">Имя</label> <input id="firstname" value='{{ form["name"] }}' name='name' type="text" class="bg-light form-control" placeholder="Артём"> </div>
+                    <div class="col-md-6 pt-md-0 pt-3"> <label for="lastname">Фамилия</label> <input id="lastname" value='{{ form["surname"] }}' name='surname' type="text" class="bg-light form-control" placeholder="Лиенко"> </div>
                 </div>
                 <div class="row py-2">
                     <div class="col-md-6"> <label for="email">Почта</label> <input value='{{ form["email"] }}' name="email" type="email" class="bg-light form-control" placeholder="lienkko_@email.com"> </div>

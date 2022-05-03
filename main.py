@@ -70,6 +70,9 @@ def logout():
 def load_profile(id):
     db_sess = db_session.create_session()
     image = db_sess.query(ProfileImage).filter(ProfileImage.id == id).first()
+    if not image:
+        return '<head><title>Learnfull - ' \
+               'Такого файла не найдено</title></head><body><h1>Такого файла не найдено</h1></body>'
 
     return '''<html><head></head><body style="background: gray;"><img src="data:image/png;base64,''' + \
            f'''{base64.b64encode(image.data).decode()}"></body></html>'''
@@ -93,9 +96,12 @@ def profile():
         db_sess = db_session.create_session()
         image = db_sess.query(ProfileImage).filter(ProfileImage.id == current_user.profile_image).first()
         user = db_sess.query(User).filter(User.id == current_user.id).first()
+        diction = user.to_dict(only=('email', 'name', 'surname', 'phone', 'country', 'language'))
+        for i in diction:
+            if diction[i] is None:
+                diction[i] = ''
         return render_template('lms_html/profile/profile.html',
-                               pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(), form=user.to_dict(
-                only=('email', 'name', 'surname', 'phone', 'country', 'language')))
+                               pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(), form=diction)
     elif request.method == 'POST':
         if 'pfpupload' in request.form:
             pfp = request.files['pfpimg'].stream.read()
