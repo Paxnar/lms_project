@@ -130,6 +130,26 @@ def profile():
         return redirect("/")
 
 
+@app.route('/create_guide')
+def create_guide():
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    return render_template('lms_html/les_form/les_form.html')
+
+
+@app.route('/guide_preview', methods=['GET', 'POST'])
+def guide_preview():
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    images = ['data:image/png;base64,' + base64.b64encode(image.stream.read()).decode() for image in
+              request.files.getlist('attach')]
+    form = {'message': request.form['message'].split('\n'),
+            'images': images,
+            'name': request.form['name']}
+    form['len'] = len(form['message'])
+    return render_template('lms_html/les_form/guide.html', form=form)
+
+
 def main():
     db_session.global_init("db/users.db")
     app.register_blueprint(user_api.blueprint)

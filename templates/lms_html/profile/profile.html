@@ -17,8 +17,11 @@
             <h4 class="pb-4 border-bottom">Настройки аккаунта</h4>
             <div class="d-flex align-items-start py-3 border-bottom"> <img src="{{ pfp }}" class="img" alt="">
                 <div class="pl-sm-4 pl-2" id="img-section"> <b>Фото профиля</b>
-                    <form action='' method="post" enctype="multipart/form-data" id="pfpupload"><p>Формат файла .png не больше 1MB</p> <label for="uploadimg" class="btn button border"><b>Загрузить</b></label><input name="pfpimg" form='pfpupload' size="1048576" accept=".png" type="file" id="uploadimg" hidden required/>
-                    <button form="pfpupload" name="pfpupload" type="submit" class="btn button border"><b>Сохранить</b></button></form>
+                    <form action='' method="post" enctype="multipart/form-data" id="pfpupload"><p>Формат файла .png не больше 1MB</p>
+                        <label for="uploadimg" class="btn button border"><b>Загрузить</b></label>
+                        <input name="pfpimg" form='pfpupload' size="1048576" accept=".png" type="file" id="uploadimg" hidden required="required"/>
+                        <button form="pfpupload" name="pfpupload" type="submit" class="btn button border"><b>Сохранить</b></button>
+                    </form>
                 </div>
             </div>
             <form action="" method="post" id="formprofile">
@@ -28,8 +31,8 @@
                     <div class="col-md-6 pt-md-0 pt-3"> <label for="lastname">Фамилия</label> <input id="lastname" value='{{ form["surname"] }}' name='surname' type="text" class="bg-light form-control" placeholder="Лиенко"> </div>
                 </div>
                 <div class="row py-2">
-                    <div class="col-md-6"> <label for="email">Почта</label> <input value='{{ form["email"] }}' name="email" type="email" class="bg-light form-control" placeholder="lienkko_@email.com"> </div>
-                    <div class="col-md-6 pt-md-0 pt-3"> <label for="phone">Номер Телефона</label> <input value='{{ form["phone"] }}' name='phone' type="tel" class="bg-light form-control" placeholder="+7 918-548-6015"> </div>
+                    <div class="col-md-6"> <label for="email">Почта</label> <input id="email" value='{{ form["email"] }}' name="email" type="email" class="bg-light form-control" placeholder="lienkko_@email.com"> </div>
+                    <div class="col-md-6 pt-md-0 pt-3"> <label for="phone">Номер Телефона</label> <input id='phone' value='{{ form["phone"] }}' name='phone' type="tel" class="bg-light form-control" placeholder="+7 918-548-6015"> </div>
                 </div>
                 <div class="row py-2">
                     <div class="col-md-6"> <label for="country">Страна</label> <select name='country' id="country" class="bg-light">
