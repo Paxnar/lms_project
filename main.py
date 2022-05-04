@@ -117,8 +117,9 @@ def profile():
                 image = db_sess.query(ProfileImage).filter(ProfileImage.id == pi.id).first()
                 user = db_sess.query(User).filter(User.id == current_user.id).first()
                 return render_template('lms_html/profile/profile.html',
-                                       pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(), form=user.to_dict(
-                        only=('email', 'name', 'surname', 'phone', 'country', 'language')))
+                                       pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(),
+                                       form=user.to_dict(
+                                           only=('email', 'name', 'surname', 'phone', 'country', 'language')))
         jsons = {'user': current_user.id}
         for i in request.form:
             if request.form[i] == '' and (i == 'name' or i == 'email'):
@@ -149,6 +150,27 @@ def guide_preview():
         return redirect('/login')
     if request.method == 'POST':
         if 'stuff' in request.form:
+            posting = post('http://localhost:5000/api/add_guide', json=ast.literal_eval(request.form['stuff']))
+            return redirect('/guide/' + str(posting.json()['id']))
+        images = ['data:image/png;base64,' + base64.b64encode(image.stream.read()).decode() for image in
+                  request.files.getlist('attach')]
+        form = {'message': request.form['message'].split('\n'),
+                'images': images,
+                'name': request.form['name'],
+                'owner_id': current_user.id}
+        form['len'] = len(form['message'])
+        return render_template('lms_html/les_form/guide_preview.html', form=form, form_s=str(form))
+    return redirect('/create_guide')
+
+
+@app.route('/guide/<id>')
+def guide(id):
+    getting = get('http://localhost:5000/api/get_guide/' + id)
+    if getting.text == 'not found':
+        return '<h1>Error: Guide not found</h1>'
+    return render_template('lms_html/les_form/guide.html', form=getting.json())
+    '''if request.method == 'POST':
+        if 'stuff' in request.form:
             post('http://localhost:5000/api/add_guide', json=ast.literal_eval(request.form['stuff']))
             return redirect('/')
         images = ['data:image/png;base64,' + base64.b64encode(image.stream.read()).decode() for image in
@@ -158,8 +180,8 @@ def guide_preview():
                 'name': request.form['name'],
                 'owner_id': current_user.id}
         form['len'] = len(form['message'])
-        return render_template('lms_html/les_form/guide.html', form=form, form_s=str(form))
-    return redirect('/create_guide')
+        return render_template('lms_html/les_form/guide_preview.html', form=form, form_s=str(form))
+    return redirect('/create_guide')'''
 
 
 def main():

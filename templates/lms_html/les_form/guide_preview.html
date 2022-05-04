@@ -3,15 +3,15 @@
 <head>
     <link rel="shortcut icon" href="/static/images/lms_icon.png" type="image/png">
     <link rel="stylesheet" href="{{url_for('static', filename='css/guide.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/les_form_style.css')}}">
     <meta charset="UTF-8">
-    <title>Урок - {{form['name']}}</title>
+    <title>Предпросмотр - {{form['name']}}</title>
 </head>
 <body>
 <div style="padding-left: 70px;
     margin-right: auto;
     margin-left: auto;
     max-width: 560px;">
-<h1>Автор - {{form['owner']}}</h1>
 <h1>{{form['name']}}</h1>
 {% for i in form['message'] %}
 {{ i }}
@@ -23,6 +23,12 @@
 <img src="{{ i }}" alt="" style="max-width: 340px; max-height: 340px; border-radius: 6px; object-fit: cover">
 <br>
 {% endfor %}
+<form method="post">
+    <input name='stuff' type="text" value="{{ form_s }}" hidden="hidden">
+    <div class="form-submit">
+          <button type="submit">Отправить сообщение</button>
+        </div>
+</form>
 </div>
 </body>
 </html>
