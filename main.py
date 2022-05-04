@@ -1,7 +1,5 @@
 import base64
-import io
-import PIL.Image as Image
-
+import ast
 from flask import Flask, render_template, redirect, request, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post, get
@@ -9,8 +7,9 @@ from werkzeug.exceptions import abort
 from data.defaultpfp import defaultprofile
 from data.users import User
 from data.profiles import ProfileImage
+from data.guides import Guide
 from data import db_session
-from api import user_api
+from api import user_api, guide_api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -130,10 +129,17 @@ def profile():
         return redirect("/")
 
 
-@app.route('/create_guide')
+@app.route('/create_guide', methods=['GET', 'POST'])
 def create_guide():
     if not current_user.is_authenticated:
         return redirect('/login')
+    '''if request.method == 'POST':
+        jsons = {'owner_id': current_user.id,
+                 'title': request.form['name'],
+                 'text': str(request.form['message'].split('\n')),
+                 'images': str([image.stream.read() for image in request.files.getlist('attach')])}
+        # post('http://localhost:5000/api/add_guide', json=jsons).json()
+        post('http://localhost:5000/guide_preview', )'''
     return render_template('lms_html/les_form/les_form.html')
 
 
@@ -141,18 +147,25 @@ def create_guide():
 def guide_preview():
     if not current_user.is_authenticated:
         return redirect('/login')
-    images = ['data:image/png;base64,' + base64.b64encode(image.stream.read()).decode() for image in
-              request.files.getlist('attach')]
-    form = {'message': request.form['message'].split('\n'),
-            'images': images,
-            'name': request.form['name']}
-    form['len'] = len(form['message'])
-    return render_template('lms_html/les_form/guide.html', form=form)
+    if request.method == 'POST':
+        if 'stuff' in request.form:
+            post('http://localhost:5000/api/add_guide', json=ast.literal_eval(request.form['stuff']))
+            return redirect('/')
+        images = ['data:image/png;base64,' + base64.b64encode(image.stream.read()).decode() for image in
+                  request.files.getlist('attach')]
+        form = {'message': request.form['message'].split('\n'),
+                'images': images,
+                'name': request.form['name'],
+                'owner_id': current_user.id}
+        form['len'] = len(form['message'])
+        return render_template('lms_html/les_form/guide.html', form=form, form_s=str(form))
+    return redirect('/create_guide')
 
 
 def main():
     db_session.global_init("db/users.db")
     app.register_blueprint(user_api.blueprint)
+    app.register_blueprint(guide_api.blueprint)
     db_sess = db_session.create_session()
     image = db_sess.query(ProfileImage).filter(ProfileImage.id == 1).first()
     if not image:

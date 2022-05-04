@@ -3,6 +3,7 @@
 <head>
     <link rel="shortcut icon" href="static/images/lms_icon.png" type="image/png">
     <link rel="stylesheet" href="{{url_for('static', filename='css/guide.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/les_form_style.css')}}">
     <meta charset="UTF-8">
     <title>Предпросмотр - {{form['name']}}</title>
 </head>
@@ -22,6 +23,12 @@
 <img src="{{ i }}" alt="" style="max-width: 340px; max-height: 340px; border-radius: 6px; object-fit: cover">
 <br>
 {% endfor %}
+<form method="post">
+    <input name='stuff' type="text" value="{{ form_s }}" hidden="hidden">
+    <div class="form-submit">
+          <button type="submit">Отправить сообщение</button>
+        </div>
+</form>
 </div>
 </body>
 </html>
