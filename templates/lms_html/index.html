@@ -75,12 +75,12 @@ align-items: center;">Выйти</a></li>
                 <div style="display: flex;flex-direction: column;">
                     <a href="{{'/guide/' + guide['id']}}">{{ guide['title'] }}</a>
                     <a href="{{'/?category=' + guide['category'][0]}}">{{ guide['category'][1] }}</a>
-                    {% for i in guide['text'] %}
+                    <!-- {% for i in guide['text'] %}
                     {{ i }}
                     {% if guide['len'] > 1 %}
                     <br>
                     {% endif %}
-                    {% endfor %}
+                    {% endfor %} -->
                     <div>
                         <img src="data:image/png;base64,{{ guide['owner_pfp'] }}" alt="" class="prof_icon">
                         {{ guide['name'] + guide['surname'] }}
