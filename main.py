@@ -59,10 +59,10 @@ def index():
                       'category': [guide.category],
                       'owner_pfp': base64.b64encode(owner_pfp.data).decode()}
         guide_dict['len'] = len(guide_dict['text'])
-        if guide.category != 'other':
+        if guide.category not in ['other', 'python']:
             guide_dict['category'].append(guide.category.upper())
         else:
-            guide_dict['category'].append('Другое')
+            guide_dict['category'].append(guide.category.capitalize())
         if owner.surname:
             guide_dict['surname'] = ' ' + owner.surname
         else:

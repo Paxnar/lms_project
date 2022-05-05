@@ -8,18 +8,6 @@ from data.profiles import ProfileImage
 blueprint = flask.Blueprint('user_api', __name__, template_folder='templates')
 
 
-'''@blueprint.route('/api/user_get', methods=['GET'])
-def get_user():
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == request.json['user']).first()
-    return jsonify(
-        {
-            'user':
-                user.to_dict(only=('email', 'name', 'surname', 'phone', 'country', 'language'))
-        }
-    )'''
-
-
 @blueprint.route('/api/user_edit', methods=['POST'])
 def edit_user():
     if not request.json:
