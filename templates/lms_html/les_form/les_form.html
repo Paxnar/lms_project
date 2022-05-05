@@ -11,7 +11,7 @@
 <body>
 
   <div class="container">
-    <h1>lesson</h1>
+    <h1>Урок</h1>
 
     <div class="form-container form__wrapper">
       <!-- Форма обратной связи -->
@@ -43,7 +43,14 @@
           <div class="invalid-feedback"></div>
         </div>
 
-       
+        <div class="form-group">
+          <select name="category" id="category" class="form-control">
+           <option value="python" selected="">Python</option>
+           <option value="html5">HTML5</option>
+           <option value="css3">CSS3</option><option value="js">JS</option>
+           <option value="other">Другое</option>
+          </select>
+        </div>
 
         <!-- Сообщение об ошибке -->
         <div class="form-error form-error_hide">Исправьте данные и отправьте форму ещё раз.</div>

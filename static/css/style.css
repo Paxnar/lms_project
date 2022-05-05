@@ -45,6 +45,7 @@ text-decoration: none;
 
 .lng_but_act {border-radius: 25px; 
 text-align: center;
+margin-left: 30px;
 color: rgba(16, 14, 102, 0.65);
 font-family: Jost;
 font-size: 24px;}

@@ -14,6 +14,7 @@ class Guide(SqlAlchemyBase, UserMixin, SerializerMixin):
     title = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     images = sqlalchemy.Column(sqlalchemy.String)
+    category = sqlalchemy.Column(sqlalchemy.String, nullable=False)
 
     def __repr__(self):
         return f'<Guide> {self.id} {self.owner_id} {self.title}'

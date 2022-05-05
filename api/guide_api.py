@@ -33,14 +33,15 @@ def add_guide():
     if not request.json:
         return jsonify({'error': 'Empty request'})
     elif not all(key in request.json for key in
-                 ['owner_id', 'name', 'message']):
+                 ['owner_id', 'name', 'message', 'category']):
         return jsonify({'error': 'Bad request'})
     db_sess = db_session.create_session()
 
     guide = Guide(
         owner_id=request.json['owner_id'],
         title=request.json['name'],
-        text=str(request.json['message'])
+        text=str(request.json['message']),
+        category=request.json['category']
     )
     if 'images' in request.json and request.json['images'] != ['data:image/png;base64,']:
         guide.images = str(request.json['images'])
