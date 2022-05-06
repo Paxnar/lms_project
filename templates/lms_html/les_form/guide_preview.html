@@ -9,16 +9,18 @@
 </head>
 <body>
 <div id="lms_icon">
-    <li><a href="/guide_preview" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/arrow_icon.png')}}" alt=""></a></li>
+    <li><a href="/create_guide" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/arrow_icon.png')}}" alt=""></a></li>
 </div>
 <div class="main">
 <p class="les_name">{{form['name']}}</p>
+<div class="text">
 {% for i in form['message'] %}
 {{ i }}
 {% if form['len'] > 1 %}
 <br>
 {% endif %}
 {% endfor %}
+</div>
 {% for i in form['images'] %}
 <img class="guide_img" src="{{ i }}" alt="" style="max-width: 340px; max-height: 340px; border-radius: 6px; object-fit: cover">
 <br>

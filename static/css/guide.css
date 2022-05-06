@@ -1,7 +1,7 @@
 .guide_img:hover {
    transition: 2s;
-   transition-delay:0.7s;
-  -webkit-transform: scale(1.5);
+   transition-delay:0.2s;
+  -webkit-transform: scale(1.2);
 }
 
 .lms_icon {margin-left: 8px;
@@ -16,9 +16,17 @@
 text-align: center;
 margin:0;}
 
+.text {align-self: flex-start;
+width: 450px;
+ overflow-wrap: break-word;}
+
 .main {padding-left: 70px;
     margin-right: auto;
     margin-left: auto;
     max-width: 560px;
     border-right: 1px solid grey;
-    border-left: 1px solid grey;}
+    border-left: 1px solid grey;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;}
