@@ -8,11 +8,11 @@
     <title>Предпросмотр - {{form['name']}}</title>
 </head>
 <body>
-<div style="padding-left: 70px;
-    margin-right: auto;
-    margin-left: auto;
-    max-width: 560px;">
-<h1>{{form['name']}}</h1>
+<div id="lms_icon">
+    <li><a href="/guide_preview" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/arrow_icon.png')}}" alt=""></a></li>
+</div>
+<div class="main">
+<p class="les_name">{{form['name']}}</p>
 {% for i in form['message'] %}
 {{ i }}
 {% if form['len'] > 1 %}
@@ -20,13 +20,13 @@
 {% endif %}
 {% endfor %}
 {% for i in form['images'] %}
-<img src="{{ i }}" alt="" style="max-width: 340px; max-height: 340px; border-radius: 6px; object-fit: cover">
+<img class="guide_img" src="{{ i }}" alt="" style="max-width: 340px; max-height: 340px; border-radius: 6px; object-fit: cover">
 <br>
 {% endfor %}
 <form method="post">
     <input name='stuff' type="text" value="{{ form_s }}" hidden="hidden">
     <div class="form-submit">
-          <button type="submit">Готово/button>
+          <button type="submit">Готово</button>
         </div>
 </form>
 </div>

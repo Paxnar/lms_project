@@ -1,3 +1,24 @@
-img:hover {
+.guide_img:hover {
+   transition: 2s;
+   transition-delay:0.7s;
   -webkit-transform: scale(1.5);
 }
+
+.lms_icon {margin-left: 8px;
+    margin-top: 14px;
+    width: 40px;
+    height: 40px;}
+#lms_icon li{
+    list-style: none;
+}
+
+.les_name {font-size: 50px;
+text-align: center;
+margin:0;}
+
+.main {padding-left: 70px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 560px;
+    border-right: 1px solid grey;
+    border-left: 1px solid grey;}
