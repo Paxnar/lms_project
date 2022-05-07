@@ -1,7 +1,10 @@
-.guide_img:hover {
+.guide_img {
    transition: 2s;
    transition-delay:0.2s;
-  -webkit-transform: scale(1.2);
+   }
+
+.guide_img:hover {
+  -webkit-transform: scale(1.1);
 }
 
 .lms_icon {margin-left: 8px;
