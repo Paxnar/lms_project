@@ -54,10 +54,14 @@ def index():
         owner_pfp = db_sess.query(ProfileImage).filter(ProfileImage.id == owner.profile_image).first()
         guide_dict = {'id': str(guide.id),
                       'title': guide.title,
-                      'text': ast.literal_eval(guide.text),
                       'name': owner.name,
                       'category': [guide.category],
                       'owner_pfp': base64.b64encode(owner_pfp.data).decode()}
+        guide_text = ast.literal_eval(guide.text)
+        if len(''.join(guide_text)) > 42:
+            guide_dict['text'] = ''.join(guide_text)[:42] + '...'
+        else:
+            guide_dict['text'] = ''.join(guide_text)
         guide_dict['len'] = len(guide_dict['text'])
         if guide.category not in ['other', 'python']:
             guide_dict['category'].append(guide.category.upper())

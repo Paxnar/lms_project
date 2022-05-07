@@ -77,10 +77,7 @@ align-items: center;">Выйти</a></li>
                   <h3 class="card__header">{{ guide['category'][1] }}</h3>
                   <h3 class="card__header">{{ guide['title'] }}</h3>
                   <p class="card__info">
-                    {{ guide['text'][0] }}...
-                    {% if guide['len'] > 1 %}
-                    <br>
-                    {% endif %}
+                    {{ guide['text'] }}
                     </p>
                 </div>
                 <img class="widget_img" src="{{url_for('static', filename='/images/widget.png')}}" alt="">
