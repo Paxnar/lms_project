@@ -30,6 +30,7 @@ def edit_user():
         user.country = request.json['country']
     db_sess.add(user)
     db_sess.commit()
+    db_sess.close()
     return jsonify({'success': 'OK'})
 
 
@@ -50,5 +51,6 @@ def register_user():
     user.profile_image = 1
     db_sess.add(user)
     db_sess.commit()
+    db_sess.close()
     return jsonify({'success': 'OK'})
 

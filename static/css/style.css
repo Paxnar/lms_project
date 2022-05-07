@@ -120,7 +120,7 @@ margin-left: auto;
 
 }
 
-.widget_img {border-radius: 0 10px 10px 0 ;}
+.widget_img {width: 315px; border-radius: 0 10px 10px 0 ;}
 
 .card__content {
     width: 315px;

@@ -80,7 +80,11 @@ align-items: center;">Выйти</a></li>
                     {{ guide['text'] }}
                     </p>
                 </div>
+                {% if guide['images'] %}
+                <img class="widget_img" src="{{ guide['images'][0] }}" alt="">
+                {% else %}
                 <img class="widget_img" src="{{url_for('static', filename='/images/widget.png')}}" alt="">
+                {% endif %}
                 <h4 class="card__name_av">{{ guide['name'] + guide['surname'] }}</h4>
               </div>
               {% endfor %}

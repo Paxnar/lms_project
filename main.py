@@ -27,7 +27,9 @@ def not_found(_):
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
+    user = db_sess.query(User).get(user_id)
+    db_sess.close()
+    return user
 
 
 @app.route('/')
@@ -54,14 +56,10 @@ def index():
         owner_pfp = db_sess.query(ProfileImage).filter(ProfileImage.id == owner.profile_image).first()
         guide_dict = {'id': str(guide.id),
                       'title': guide.title,
+                      'text': ast.literal_eval(guide.text),
                       'name': owner.name,
                       'category': [guide.category],
                       'owner_pfp': base64.b64encode(owner_pfp.data).decode()}
-        guide_text = ast.literal_eval(guide.text)
-        if len(''.join(guide_text)) > 42:
-            guide_dict['text'] = ''.join(guide_text)[:42] + '...'
-        else:
-            guide_dict['text'] = ''.join(guide_text)
         guide_dict['len'] = len(guide_dict['text'])
         if guide.category not in ['other', 'python']:
             guide_dict['category'].append(guide.category.upper())
@@ -76,6 +74,7 @@ def index():
         else:
             guide_dict['images'] = []
         guides_list.append(guide_dict)
+    db_sess.close()
     return render_template("lms_html/index.html", pfp=pfp, category=request.args['category'], guides=guides_list)
 
 
@@ -88,10 +87,19 @@ def register():
             return render_template('lms_html/user/signup.html', message='Пароли не совпадают')
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == request.form['email']).first():
+            db_sess.close()
             return render_template('lms_html/user/signup.html', message="Такой пользователь уже есть!")
-        post('http://localhost:5000/api/user',
-             json={'email': request.form['email'], 'name': request.form['username'],
-                   'password': request.form['pasw']}).json()
+        db_sess = db_session.create_session()
+
+        user = User(
+            email=request.form['email'],
+            name=request.form['username']
+        )
+        user.set_password(request.form['pasw'])
+        user.profile_image = 1
+        db_sess.add(user)
+        db_sess.commit()
+        db_sess.close()
         return redirect("/login")
 
 
@@ -104,7 +112,9 @@ def login():
         user = db_sess.query(User).filter(User.email == request.form['email']).first()
         if user and user.check_password(request.form['pasw']):
             login_user(user, remember=True)
+            db_sess.close()
             return redirect('/')
+        db_sess.close()
         return render_template('lms_html/user/login.html', message='Неправильный логин или пароль!')
 
 
@@ -127,6 +137,7 @@ def profile():
         for i in diction:
             if diction[i] is None:
                 diction[i] = ''
+        db_sess.close()
         return render_template('lms_html/profile/profile.html',
                                pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(), form=diction)
     elif request.method == 'POST':
@@ -140,10 +151,15 @@ def profile():
                 usr.profile_image = pi.id
                 db_sess.add(usr)
                 db_sess.commit()
-                post('http://localhost:5000/api/user_edit',
-                     json={'user': current_user.id, 'profile_image': pi.id}).json()
+                usei = {'user': current_user.id, 'profile_image': pi.id}
+                user = db_sess.query(User).filter(User.id == usei['user']).first()
+                if 'profile_image' in usei:
+                    user.profile_image = usei['profile_image']
+                db_sess.add(user)
+                db_sess.commit()
                 image = db_sess.query(ProfileImage).filter(ProfileImage.id == pi.id).first()
                 user = db_sess.query(User).filter(User.id == current_user.id).first()
+                db_sess.close()
                 return render_template('lms_html/profile/profile.html',
                                        pfp='data:image/png;base64,' + base64.b64encode(image.data).decode(),
                                        form=user.to_dict(
@@ -153,8 +169,25 @@ def profile():
             if request.form[i] == '' and (i == 'name' or i == 'email'):
                 continue
             jsons[i] = request.form[i]
-        post('http://localhost:5000/api/user_edit',
-             json=jsons).json()
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == jsons['user']).first()
+        if 'profile_image' in jsons:
+            user.profile_image = jsons['profile_image']
+        if 'name' in jsons:
+            user.name = jsons['name']
+        if 'surname' in jsons:
+            user.surname = jsons['surname']
+        if 'email' in jsons:
+            user.email = jsons['email']
+        if 'phone' in jsons:
+            user.phone = jsons['phone']
+        if 'language' in jsons:
+            user.language = jsons['language']
+        if 'country' in jsons:
+            user.country = jsons['country']
+        db_sess.add(user)
+        db_sess.commit()
+        db_sess.close()
         return redirect("/")
 
 
@@ -162,6 +195,8 @@ def profile():
 def load_profile(id):
     db_sess = db_session.create_session()
     image = db_sess.query(ProfileImage).filter(ProfileImage.id == id).first()
+
+    db_sess.close()
     if not image:
         return abort(404)
 
@@ -181,9 +216,23 @@ def guide_preview():
     if not current_user.is_authenticated:
         return redirect('/login')
     if request.method == 'POST':
+        requestt = ast.literal_eval(request.form['stuff'])
         if 'stuff' in request.form:
-            posting = post('http://localhost:5000/api/add_guide', json=ast.literal_eval(request.form['stuff']))
-            return redirect('/guide/' + str(posting.json()['id']))
+            db_sess = db_session.create_session()
+
+            guide = Guide(
+                owner_id=requestt['owner_id'],
+                title=requestt['name'],
+                text=str(requestt['message']),
+                category=requestt['category']
+            )
+            if 'images' in requestt and requestt['images'] != ['data:image/png;base64,']:
+                guide.images = str(requestt['images'])
+            db_sess.add(guide)
+            db_sess.commit()
+            guide_id = guide.id
+            db_sess.close()
+            return redirect('/guide/' + str(guide_id))
         images = ['data:image/png;base64,' + base64.b64encode(image.stream.read()).decode() for image in
                   request.files.getlist('attach')]
         form = {'message': request.form['message'].split('\n'),
@@ -198,10 +247,25 @@ def guide_preview():
 
 @app.route('/guide/<id>')
 def guide_view(id):
-    getting = get('http://localhost:5000/api/get_guide/' + id)
-    if getting.text == 'not found':
+    db_sess = db_session.create_session()
+    guide = db_sess.query(Guide).filter(Guide.id == id).first()
+    if not guide:
+        returning = 'not found'
+    else:
+        user = db_sess.query(User).filter(User.id == guide.owner_id).first()
+        form = {'owner': user.name,
+                'name': guide.title,
+                'message': ast.literal_eval(guide.text)}
+        form['len'] = len(form['message'])
+        if guide.images:
+            form['images'] = ast.literal_eval(guide.images)
+        if user.surname:
+            form['owner'] += ' ' + user.surname
+        returning = jsonify(form)
+    db_sess.close()
+    if returning == 'not found':
         return abort(404)
-    return render_template('lms_html/les_form/guide.html', form=getting.json())
+    return render_template('lms_html/les_form/guide.html', form=returning.json())
 
 
 def main():
@@ -214,8 +278,10 @@ def main():
         profileimage = ProfileImage(data=defaultprofile)
         db_sess.add(profileimage)
         db_sess.commit()
-    app.run()
+        db_sess.close()
+    return app
+    # app.run(host='0.0.0.0', port=port)
 
 
-if __name__ == '__main__':
-    main()
+main().run()
+
