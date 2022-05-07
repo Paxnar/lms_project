@@ -216,8 +216,8 @@ def guide_preview():
     if not current_user.is_authenticated:
         return redirect('/login')
     if request.method == 'POST':
-        requestt = ast.literal_eval(request.form['stuff'])
         if 'stuff' in request.form:
+            requestt = ast.literal_eval(request.form['stuff'])
             db_sess = db_session.create_session()
 
             guide = Guide(
@@ -265,11 +265,11 @@ def guide_view(id):
     db_sess.close()
     if returning == 'not found':
         return abort(404)
-    return render_template('lms_html/les_form/guide.html', form=returning.json())
+    return render_template('lms_html/les_form/guide.html', form=form)
 
 
 def main():
-    db_session.global_init("db/users.db")
+    db_session.global_init("b")
     app.register_blueprint(user_api.blueprint)
     app.register_blueprint(guide_api.blueprint)
     db_sess = db_session.create_session()
@@ -280,7 +280,6 @@ def main():
         db_sess.commit()
         db_sess.close()
     return app
-    # app.run(host='0.0.0.0', port=port)
 
 
 main().run()
