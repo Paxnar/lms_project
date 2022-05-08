@@ -72,21 +72,21 @@ align-items: center;">Выйти</a></li>
         <div class="container">
             <div class="card__container">
               {% for guide in guides %}
-              <div class="card">
+              <a class="card" href='/guide/{{ guide["id"] }}' style="text-decoration: none;">
                 <div class="card__content">
                   <h3 class="card__header">{{ guide['category'][1] }}</h3>
                   <h3 class="card__header">{{ guide['title'] }}</h3>
-                  <p class="card__info">
-                    {{ guide['text'][0]}}
+                  <p class="card__info" style="word-break: break-word;">
+                    {{ guide['text']}}
                     </p>
                 </div>
                 {% if guide['images'] %}
-                <img class="widget_img" src="{{ guide['images'][0] }}" alt="">
+                <img class="widget_img" src="{{ guide['images'] }}" alt="">
                 {% else %}
                 <img class="widget_img" src="{{url_for('static', filename='/images/widget.png')}}" alt="">
                 {% endif %}
                 <h4 class="card__name_av">{{ guide['name'] + guide['surname'] }}</h4>
-              </div>
+              </a>
               {% endfor %}
             </div>
         </div>
