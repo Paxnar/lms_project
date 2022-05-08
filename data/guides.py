@@ -11,10 +11,10 @@ class Guide(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     owner_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"), nullable=False)
-    title = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
-    text = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
-    images = sqlalchemy.Column(sqlalchemy.String(255))
-    category = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
+    title = sqlalchemy.Column(sqlalchemy.String(65534), nullable=False)
+    text = sqlalchemy.Column(sqlalchemy.String(65534), nullable=False)
+    images = sqlalchemy.Column(sqlalchemy.String(65534))
+    category = sqlalchemy.Column(sqlalchemy.String(65534), nullable=False)
 
     def __repr__(self):
         return f'<Guide> {self.id} {self.owner_id} {self.title}'

@@ -11,13 +11,13 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    email = sqlalchemy.Column(sqlalchemy.String(255), index=True, unique=True, nullable=False)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
-    surname = sqlalchemy.Column(sqlalchemy.String(255))
-    name = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
-    phone = sqlalchemy.Column(sqlalchemy.String(255))
-    country = sqlalchemy.Column(sqlalchemy.String(255))
-    language = sqlalchemy.Column(sqlalchemy.String(255))
+    email = sqlalchemy.Column(sqlalchemy.String(65534), index=True, unique=True, nullable=False)
+    hashed_password = sqlalchemy.Column(sqlalchemy.String(65534), nullable=False)
+    surname = sqlalchemy.Column(sqlalchemy.String(65534))
+    name = sqlalchemy.Column(sqlalchemy.String(65534), nullable=False)
+    phone = sqlalchemy.Column(sqlalchemy.String(65534))
+    country = sqlalchemy.Column(sqlalchemy.String(65534))
+    language = sqlalchemy.Column(sqlalchemy.String(65534))
     profile_image = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("profiles.id"))
     profile_relation = orm.relation('ProfileImage')
 
