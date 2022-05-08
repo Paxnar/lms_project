@@ -1,5 +1,7 @@
 import base64
 import ast
+import io
+from PIL import Image as pil
 from flask import Flask, render_template, redirect, request, jsonify, make_response
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from requests import post, get
@@ -57,11 +59,11 @@ def index():
                       'name': owner.name,
                       'category': [guide.category],
                       'owner_pfp': base64.b64encode(owner_pfp.data).decode()}
-        guide_text = ast.literal_eval(guide.text)
-        if len(''.join(guide_text)) > 42:
-            guide_dict['text'] = ''.join(guide_text)[:42] + '...'
+        guide_text = ''.join(ast.literal_eval(guide.text))
+        if len(guide_text) > 42:
+            guide_dict['text'] = guide_text[:42] + '...'
         else:
-            guide_dict['text'] = ''.join(guide_text)
+            guide_dict['text'] = guide_text
         guide_dict['len'] = len(guide_dict['text'])
         if guide.category not in ['other', 'python']:
             guide_dict['category'].append(guide.category.upper())
@@ -72,7 +74,17 @@ def index():
         else:
             guide_dict['surname'] = ''
         if guide.images:
-            guide_dict['images'] = ast.literal_eval(guide.images)
+            thething = ast.literal_eval(guide.images)[0]
+            imag = thething[22:]
+            bytedimage = base64.b64decode(imag)
+            image = pil.open(io.BytesIO(bytedimage))
+            if image.width / image.height > 250 / 300:
+                image = image.crop((0, 0, 250 / 300 * image.height, image.height))
+            elif image.width / image.height < 250 / 300:
+                image = image.crop((0, 0, image.width, 250 / 300 * image.width))
+            image_result = io.BytesIO()
+            image.save(image_result, format='PNG')
+            guide_dict['images'] = thething[:22] + base64.b64encode(image_result.getvalue()).decode()
         else:
             guide_dict['images'] = []
         guides_list.append(guide_dict)
