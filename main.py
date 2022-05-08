@@ -216,6 +216,19 @@ def guide_view(id):
     return render_template('lms_html/les_form/guide.html', form=getting.json())
 
 
+@app.route('/delete/<id>')
+def delete_guide(id):
+    if current_user.is_authenticated:
+        if current_user.id == 1:
+            db_sess = db_session.create_session()
+            guide = db_sess.query(Guide).filter(Guide.id == id).first()
+            db_sess.delete(guide)
+            db_sess.flush()
+            db_sess.commit()
+            db_sess.close()
+    return redirect('/')
+
+
 def main():
     db_session.global_init("db/users.db")
     app.register_blueprint(user_api.blueprint)

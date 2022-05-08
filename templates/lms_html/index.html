@@ -78,7 +78,12 @@ align-items: center;">Выйти</a></li>
                   <h3 class="card__header">{{ guide['title'] }}</h3>
                   <p class="card__info" style="word-break: break-word;">
                     {{ guide['text']}}
-                    </p>
+                  </p>
+                  {% if current_user.id == 1 %}
+                  <form action="/delete/{{guide['id']}}">
+                  <button type="submit" class="delete">Удалить</button>
+                  </form>
+                  {% endif %}
                 </div>
                 {% if guide['images'] %}
                 <img class="widget_img" src="{{ guide['images'] }}" alt="">
