@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/static/images/lms_icon.png" type="image/png">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/guide.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/les_form_style.css')}}">
+    <meta charset="UTF-8">
+    <title>Предпросмотр - {{form['name']}}</title>
+</head>
+<body>
+<div id="lms_icon">
+    <li><a href="/create_guide" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/arrow_icon.png')}}" alt=""></a></li>
+</div>
+<div class="main">
+<p class="les_name">{{form['name']}}</p>
+<div class="text">
+{% for i in form['message'] %}
+{{ i }}
+{% if form['len'] > 1 %}
+<br>
+{% endif %}
+{% endfor %}
+</div>
+{% for i in form['images'] %}
+<img class="guide_img" src="{{ i }}" alt="" style="max-width: 340px; max-height: 340px; border-radius: 6px; object-fit: cover">
+<br>
+{% endfor %}
+<form method="post">
+    <input name='stuff' type="text" value="{{ form_s }}" hidden="hidden">
+    <div class="form-submit">
+          <button type="submit">Готово</button>
+        </div>
+</form>
+</div>
+</body>
+</html>

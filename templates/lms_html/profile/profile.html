@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="shortcut icon" href="static/images/lms_icon.png" type="image/png">
+        <title>Learnfull - Редактирование профиля</title>
+        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
+        <link href="{{url_for('static', filename='css/profile_style.css')}}" rel='stylesheet'>
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    </head>
+    <body oncontextmenu='return false' class='snippet-body'>
+        <div id="lms_icon">
+            <li><a href="/" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/arrow_icon.png')}}" alt=""></a></li>
+        </div>
+        <div class="wrapper bg-white mt-sm-5">
+            <h4 class="pb-4 border-bottom">Настройки аккаунта</h4>
+            <div class="d-flex align-items-start py-3 border-bottom"> <img src="{{ pfp }}" class="img" alt="">
+                <div class="pl-sm-4 pl-2" id="img-section"> <b>Фото профиля</b>
+                    <form action='' method="post" enctype="multipart/form-data" id="pfpupload"><p>Формат файла .png не больше 1MB</p>
+                        <label for="uploadimg" class="btn button border"><b>Загрузить</b></label>
+                        <input name="pfpimg" form='pfpupload' size="1048576" accept=".png" type="file" id="uploadimg" hidden required="required"/>
+                        <button form="pfpupload" name="pfpupload" type="submit" class="btn button border"><b>Сохранить</b></button>
+                    </form>
+                </div>
+            </div>
+            <form action="" method="post" id="formprofile">
+            <div class="py-2">
+                <div class="row py-2">
+                    <div class="col-md-6"> <label for="firstname">Имя</label> <input id="firstname" value='{{ form["name"] }}' name='name' type="text" class="bg-light form-control" placeholder="Артём"> </div>
+                    <div class="col-md-6 pt-md-0 pt-3"> <label for="lastname">Фамилия</label> <input id="lastname" value='{{ form["surname"] }}' name='surname' type="text" class="bg-light form-control" placeholder="Лиенко"> </div>
+                </div>
+                <div class="row py-2">
+                    <div class="col-md-6"> <label for="email">Почта</label> <input id="email" value='{{ form["email"] }}' name="email" type="email" class="bg-light form-control" placeholder="lienkko_@email.com"> </div>
+                    <div class="col-md-6 pt-md-0 pt-3"> <label for="phone">Номер Телефона</label> <input id='phone' value='{{ form["phone"] }}' name='phone' type="tel" class="bg-light form-control" placeholder="+7 918-548-6015"> </div>
+                </div>
+                <div class="row py-2">
+                    <div class="col-md-6"> <label for="country">Страна</label> <select name='country' id="country" class="bg-light">
+                            {% if form["country"] == 'usa' %}
+                            <option value="russia">Россия</option>
+                            <option value="usa" selected>USA</option>
+                            {% else %}
+                            <option value="russia" selected>Россия</option>
+                            <option value="usa">USA</option>
+                            {% endif %}
+
+                        </select> </div>
+                    <div class="col-md-6 pt-md-0 pt-3" id="lang"> <label for="language">Язык</label>
+                        <div class="arrow"> <select name='language' id="language" class="bg-light">
+                                {% if form["language"] == 'english' %}
+                                <option value="english" selected>English</option>
+                                <option value="english_us">English (United States)</option>
+                                <option value="ru">Русский</option>
+                                {% elif form["language"] == 'english_us' %}
+                                <option value="english">English</option>
+                                <option value="english_us" selected>English (United States)</option>
+                                <option value="ru">Русский</option>
+                                {% else %}
+                                <option value="english">English</option>
+                                <option value="english_us">English (United States)</option>
+                                <option value="ru" selected>Русский</option>
+                                {% endif %}
+                            </select> </div>
+                    </div>
+                </div>
+                <div class="py-3 pb-4"> <button form='formprofile' class="btn btn-primary mr-3">Сохранить изменения</button> <a class="btn border button" href="/">Отмена</a> </div>
+            </div>
+            </form>
+        </div>
+        <script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
+        <script type='text/javascript' src=''></script>
+        <script type='text/javascript' src=''></script>
+        <script type='text/Javascript'></script>
+    </body>
+</html>

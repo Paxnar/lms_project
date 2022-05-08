@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <title>Создание урока</title>
+  <link rel="shortcut icon" href="static/images/lms_icon.png" type="image/png">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/les_form_style.css')}}">
+</head>
+
+<body>
+  <div id="lms_icon">
+    <li><a href="/" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/lms_icon.png')}}" alt=""></a></li>
+  </div>
+
+  <div class="container">
+    <h1>Урок</h1>
+
+    <div class="form-container form__wrapper">
+      <!-- Форма обратной связи -->
+      <form id="feedback-form" action="/guide_preview" method="post" enctype="multipart/form-data">
+        <div>
+          <label for="name">Название урока</label>
+          <input id="name" name='name' type="text" class="form-control" placeholder="Урок" required="required">
+        </div>
+        <!-- Сообщение пользователя -->
+        <div class="form-group">
+          <label for="message" class="control-label">Текст урока</label>
+          <textarea id="message" name="message" class="form-control" rows="10"
+            placeholder="Текст урока (не менее 20 символов)"
+            required="required"></textarea>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <!-- Файлы, для прикрепления к форме -->
+        <div class="form-group form-attach" data-count="5">
+          <div class="form-attach__label">Файлы (не более <span class="form-attach__count">5</span>)</div>
+          <div class="form-attach__wrapper">
+            <input type="file" name="attach" multiple>
+            <div class="form-attach__description">
+              <div>Нажмите для загрузки файлов или перетащите их</div>
+              <div class="text-sm">PNG, JPG, GIF (до 512 Кбайт)</div>
+            </div>
+            <div class="form-attach__items"></div>
+          </div>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+          <select name="category" id="category" class="form-control">
+           <option value="python" selected="">Python</option>
+           <option value="html5">HTML5</option>
+           <option value="css3">CSS3</option><option value="js">JS</option>
+           <option value="other">Другое</option>
+          </select>
+        </div>
+
+        <!-- Сообщение об ошибке -->
+        <div class="form-error form-error_hide">Исправьте данные и отправьте форму ещё раз.</div>
+
+        <!-- Кнопка для отправки формы на сервер -->
+        <div class="form-submit">
+          <button type="submit">Предпросмотр</button>
+        </div>
+
+      </form>
+
+      <!-- Сообщение об успешной отправки формы -->
+      <div class="form-success form-success_hide">
+        <div class="form-success__message">Форма успешно отправлена. Нажмите <button type="button"
+            class="form-success__btn">здесь</button>, если нужно отправить ещё одну форму.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
