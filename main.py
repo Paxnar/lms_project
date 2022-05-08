@@ -83,7 +83,7 @@ def index():
             if image.width / image.height > 250 / 300:
                 image = image.crop((0, 0, 250 / 300 * image.height, image.height))
             elif image.width / image.height < 250 / 300:
-                image = image.crop((0, 0, 250 / 300 * image.height, image.height))
+                image = image.crop((0, 0, image.width, 250 / 300 * image.width))
             image_result = io.BytesIO()
             image.save(image_result, format='PNG')
             guide_dict['images'] = thething[:22] + base64.b64encode(image_result.getvalue()).decode()
