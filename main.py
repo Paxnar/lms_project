@@ -285,7 +285,7 @@ def guide_view(id):
 
 
 def main():
-    db_session.global_init("b")
+    db_session.global_init("no")
     app.register_blueprint(user_api.blueprint)
     app.register_blueprint(guide_api.blueprint)
     db_sess = db_session.create_session()
