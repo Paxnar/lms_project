@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель Администратора</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/admin.css')}}">
+    <link rel="shortcut icon" href="static/images/lms_icon.png" type="image/png">
+</head>
+<body>
+{% if toadd %}
+<form id="add" method="post" name="add">
+<div class="content">
+    <div class="form-group">
+        <select name="toadd" id="toadd" class="form-control">
+            {% for i in toadd %}
+            <option value="{{i.id}}">{{i.name}}{{i.surname}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" form="add">Добавить</button>
+</div>
+</form>
+{% endif %}
+
+{% if todelete %}
+<form id="delete" method="post" name="delete">
+<div class="content">
+    <div class="form-group">
+        <select name="todelete" id="todelete" class="form-control">
+            {% for i in todelete %}
+            <option value="{{i.id}}">{{i.name}}{{i.surname}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class='deleteb' type="submit" form="delete">Удалить</button>
+</div>
+</form>
+{% endif %}
+</body>
+</html>

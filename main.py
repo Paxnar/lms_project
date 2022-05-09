@@ -219,13 +219,50 @@ def guide_view(id):
 @app.route('/delete/<id>')
 def delete_guide(id):
     if current_user.is_authenticated:
-        if current_user.id == 1:
+        if current_user.id == 1 or current_user.is_mod:
             db_sess = db_session.create_session()
             guide = db_sess.query(Guide).filter(Guide.id == id).first()
             db_sess.delete(guide)
             db_sess.flush()
             db_sess.commit()
             db_sess.close()
+    return redirect('/')
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin_panel():
+    if current_user.is_authenticated:
+        if current_user.id == 1:
+            if request.method == 'POST':
+                if 'toadd' in request.form:
+                    db_sess = db_session.create_session()
+                    user = db_sess.query(User).filter(User.id == request.form['toadd']).first()
+                    user.is_mod = True
+                    db_sess.add(user)
+                    db_sess.commit()
+                    db_sess.close()
+                else:
+                    db_sess = db_session.create_session()
+                    user = db_sess.query(User).filter(User.id == request.form['todelete']).first()
+                    user.is_mod = False
+                    db_sess.add(user)
+                    db_sess.commit()
+                    db_sess.close()
+                return redirect('/admin')
+            db_sess = db_session.create_session()
+            users = db_sess.query(User).filter(User.id != 1, User.is_mod == 0).all()
+            users2 = db_sess.query(User).filter(User.id != 1, User.is_mod == 1).all()
+            toadd = []
+            todelete = []
+            for i in users:
+                toadd.append({'id': i.id, 'name': i.name, 'surname': ''})
+                if i.surname:
+                    toadd[-1]['surname'] = ' ' + i.surname
+            for i in users2:
+                todelete.append({'id': i.id, 'name': i.name, 'surname': ''})
+                if i.surname:
+                    todelete[-1]['surname'] = ' ' + i.surname
+            return render_template('lms_html/moderating/admin_panel.html', toadd=toadd, todelete=todelete)
     return redirect('/')
 
 
