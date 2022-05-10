@@ -83,7 +83,7 @@ align-items: center;">Выйти</a></li>
                   <p class="card__info" style="word-break: break-word;">
                     {{ guide['text']}}
                   </p>
-                  {% if current_user.id == 1 or current_user.is_mod or current_user.id == guide['id'] %}
+                  {% if current_user.id == 1 or current_user.is_mod or current_user.id == guide['o_id'] %}
                   <form action="/delete/{{guide['id']}}">
                   <button type="submit" class="delete">Удалить</button>
                   </form>
