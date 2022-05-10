@@ -57,6 +57,7 @@ def index():
         owner = db_sess.query(User).filter(User.id == guide.owner_id).first()
         owner_pfp = db_sess.query(ProfileImage).filter(ProfileImage.id == owner.profile_image).first()
         guide_dict = {'id': str(guide.id),
+                      'o_id': owner.id,
                       'title': guide.title,
                       'name': owner.name,
                       'category': [guide.category],
