@@ -1,0 +1,127 @@
+@font-face {
+    font-family: "Jost";
+    src: url("../fonts/Jost-Medium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    }
+.form-control {
+    display: block;
+    width: 50%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-control {
+    border-radius: 10px
+}
+
+.lms_icon {margin-left: 8px;
+    margin-top: 14px;
+    width: 40px;
+    height: 40px;}
+#lms_icon li{
+    list-style: none;
+}
+
+input[placeholder] {
+    font-weight: 500
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border: 1.5px solid #0779e4
+}
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap");
+*,
+*::before,
+*::after {
+
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  color: white;
+}
+.container {
+height: 100%;
+max-width: 1800px;
+margin-left: 150px;
+margin-top: 29px;
+}
+
+.card__container {
+    width: 1200px;
+    height: 1000px;
+    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+
+    color: white;
+  }
+
+.card__content {
+    width: 250px;
+    height: 100%;
+
+    background: #191a19;
+    border-radius: 5px;
+    padding: 20px;
+    cursor: pointer;
+box-shadow:  16px 16px 44px #0a0a0a,
+             -16px -16px 44px #282a28;
+    transition: 0.3s all ease-in-out;
+  }
+.card__name_av {text-transform: uppercase;
+    position: absolute;
+    margin-left: 80%;
+    margin-top: 50%;
+
+}
+
+.card {
+  position: relative;
+  width: 500px;
+  height: 300px;
+  padding: auto;
+  display: flex;
+  flex-direction: row;
+  background: #242625;
+  border-radius: 10px;
+  box-shadow: 25px 25px 50px #1b1c1b, -25px -25px 50px #2d302f;
+  margin:50px;
+
+
+  &__info {
+    text-transform: uppercase;
+    font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+  &__header {
+    text-transform: uppercase;
+    font-size: 20px;
+    margin: 40px auto;
+
+  }
+
+
+}
+
+.delete {border: 2px solid rgba(209, 21, 25, 0.65);
+border-radius: 31px;
+background-color: rgba(0, 0, 0, 0);
+padding: 5px 16px 5px 16px;
+font-size: 24px;
+font-family: Jost;
+color: rgb(209 21 25);
+text-decoration: none;
+}
+
+.widget_img {border-radius: 0 10px 10px 0 ; max-width: 250px;}

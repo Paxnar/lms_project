@@ -336,6 +336,57 @@ def admin_panel():
     return redirect('/')
 
 
+@app.route('/search')
+def search():
+    guides_list = []
+    inputter = ''
+    if 'search' in request.args:
+        inputter = request.args['search']
+        db_sess = db_session.create_session()
+        guides = db_sess.query(Guide).filter(Guide.title.contains(request.args['search'])).all()
+        guides_list = []
+        for guide in guides:
+            owner = db_sess.query(User).filter(User.id == guide.owner_id).first()
+            owner_pfp = db_sess.query(ProfileImage).filter(ProfileImage.id == owner.profile_image).first()
+            guide_dict = {'id': str(guide.id),
+                          'o_id': owner.id,
+                          'title': guide.title,
+                          'name': owner.name,
+                          'category': [guide.category],
+                          'owner_pfp': base64.b64encode(owner_pfp.data).decode()}
+            guide_text = ''.join(ast.literal_eval(guide.text))
+            if len(guide_text) > 42:
+                guide_dict['text'] = guide_text[:42] + '...'
+            else:
+                guide_dict['text'] = guide_text
+            guide_dict['len'] = len(guide_dict['text'])
+            if guide.category not in ['other', 'python']:
+                guide_dict['category'].append(guide.category.upper())
+            else:
+                guide_dict['category'].append(guide.category.capitalize())
+            if owner.surname:
+                guide_dict['surname'] = ' ' + owner.surname
+            else:
+                guide_dict['surname'] = ''
+            if guide.images:
+                thething = ast.literal_eval(guide.images)[0]
+                imag = thething[22:]
+                bytedimage = base64.b64decode(imag)
+                image = pil.open(io.BytesIO(bytedimage))
+                if image.width / image.height > 250 / 300:
+                    image = image.crop((0, 0, 250 / 300 * image.height, image.height))
+                elif image.width / image.height < 250 / 300:
+                    image = image.crop((0, 0, image.width, 250 / 300 * image.width))
+                image_result = io.BytesIO()
+                image.save(image_result, format='PNG')
+                guide_dict['images'] = thething[:22] + base64.b64encode(image_result.getvalue()).decode()
+            else:
+                guide_dict['images'] = []
+            guides_list.append(guide_dict)
+        db_sess.close()
+    return render_template('lms_html/search.html', guides=guides_list, inputter=inputter)
+
+
 def main():
     db_session.global_init("no")
     app.register_blueprint(user_api.blueprint)

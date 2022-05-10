@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/search.css')}}">
+    <link rel="shortcut icon" href="static/images/lms_icon.png" type="image/png">
+
+    <title>Learnfull - Поиск</title>
+</head>
+<body>
+<div id="lms_icon" style="max-width: 60px;margin-block-end: -58px;">
+    <li style="width: 60px;"><a href="/" class="lms_icon"><img class="lms_icon" src="{{url_for('static', filename='images/arrow_icon.png')}}" alt=""></a></li>
+</div>
+<form method="get" style="display: flex;justify-content: center;">
+    <input name="search" placeholder="Поиск" class="form-control" value="{{ inputter }}" type="text" required>
+</form>
+{% if guides %}
+<div class="container">
+            <div class="card__container">
+              {% for guide in guides %}
+              <a class="card" href='/guide/{{ guide["id"] }}' style="text-decoration: none;">
+                <div class="card__content">
+                  <h3 class="card__header">{{ guide['category'][1] }}</h3>
+                  <h3 class="card__header" style="word-break: break-word;">{{ guide['title'] }}</h3>
+                  <p class="card__info" style="word-break: break-word;">
+                    {{ guide['text']}}
+                  </p>
+                  {% if current_user.id == 1 or current_user.is_mod or current_user.id == guide['o_id'] %}
+                  <form action="/delete/{{guide['id']}}">
+                  <button type="submit" class="delete">Удалить</button>
+                  </form>
+                  {% endif %}
+                </div>
+                {% if guide['images'] %}
+                <img class="widget_img" src="{{ guide['images'] }}" alt="">
+                {% else %}
+                <img class="widget_img" src="{{url_for('static', filename='/images/widget.png')}}" alt="">
+                {% endif %}
+                <h4 class="card__name_av">{{ guide['name'] + guide['surname'] }}</h4>
+              </a>
+              {% endfor %}
+            </div>
+        </div>
+{% endif %}
+</body>
+</html>
