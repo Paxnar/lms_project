@@ -211,7 +211,6 @@ def profile():
 def load_profile(id):
     db_sess = db_session.create_session()
     image = db_sess.query(ProfileImage).filter(ProfileImage.id == id).first()
-
     db_sess.close()
     if not image:
         return abort(404)
@@ -330,6 +329,7 @@ def admin_panel():
                 todelete.append({'id': i.id, 'name': i.name, 'surname': ''})
                 if i.surname:
                     todelete[-1]['surname'] = ' ' + i.surname
+            db_sess.close()
             return render_template('lms_html/moderating/admin_panel.html', toadd=toadd, todelete=todelete)
     return redirect('/')
 
@@ -348,5 +348,5 @@ def main():
     return app
 
 
-main().run()
+# main().run()
 
