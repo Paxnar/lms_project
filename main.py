@@ -287,13 +287,14 @@ def guide_view(id):
 @app.route('/delete/<id>')
 def delete_guide(id):
     if current_user.is_authenticated:
-        if current_user.id == 1 or current_user.is_mod:
-            db_sess = db_session.create_session()
-            guide = db_sess.query(Guide).filter(Guide.id == id).first()
+        db_sess = db_session.create_session()
+        guide = db_sess.query(Guide).filter(Guide.id == id).first()
+        user = db_sess.query(User).filter(User.id == guide.owner_id).first()
+        if current_user.id == 1 or current_user.is_mod or current_user == user:
             db_sess.delete(guide)
             db_sess.flush()
             db_sess.commit()
-            db_sess.close()
+        db_sess.close()
     return redirect('/')
 
 
