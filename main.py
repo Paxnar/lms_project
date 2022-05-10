@@ -55,6 +55,7 @@ def index():
         owner = db_sess.query(User).filter(User.id == guide.owner_id).first()
         owner_pfp = db_sess.query(ProfileImage).filter(ProfileImage.id == owner.profile_image).first()
         guide_dict = {'id': str(guide.id),
+                      'o_id': owner.id,
                       'title': guide.title,
                       'name': owner.name,
                       'category': [guide.category],
@@ -219,13 +220,14 @@ def guide_view(id):
 @app.route('/delete/<id>')
 def delete_guide(id):
     if current_user.is_authenticated:
-        if current_user.id == 1 or current_user.is_mod:
-            db_sess = db_session.create_session()
-            guide = db_sess.query(Guide).filter(Guide.id == id).first()
+        db_sess = db_session.create_session()
+        guide = db_sess.query(Guide).filter(Guide.id == id).first()
+        user = db_sess.query(User).filter(User.id == guide.owner_id).first()
+        if current_user.id == 1 or current_user.is_mod or current_user == user:
             db_sess.delete(guide)
             db_sess.flush()
             db_sess.commit()
-            db_sess.close()
+        db_sess.close()
     return redirect('/')
 
 
@@ -264,6 +266,57 @@ def admin_panel():
                     todelete[-1]['surname'] = ' ' + i.surname
             return render_template('lms_html/moderating/admin_panel.html', toadd=toadd, todelete=todelete)
     return redirect('/')
+
+
+@app.route('/search')
+def search():
+    guides_list = []
+    inputter = ''
+    if 'search' in request.args:
+        inputter = request.args['search']
+        db_sess = db_session.create_session()
+        guides = db_sess.query(Guide).filter(Guide.title.contains(request.args['search'])).all()
+        guides_list = []
+        for guide in guides:
+            owner = db_sess.query(User).filter(User.id == guide.owner_id).first()
+            owner_pfp = db_sess.query(ProfileImage).filter(ProfileImage.id == owner.profile_image).first()
+            guide_dict = {'id': str(guide.id),
+                          'o_id': owner.id,
+                          'title': guide.title,
+                          'name': owner.name,
+                          'category': [guide.category],
+                          'owner_pfp': base64.b64encode(owner_pfp.data).decode()}
+            guide_text = ''.join(ast.literal_eval(guide.text))
+            if len(guide_text) > 42:
+                guide_dict['text'] = guide_text[:42] + '...'
+            else:
+                guide_dict['text'] = guide_text
+            guide_dict['len'] = len(guide_dict['text'])
+            if guide.category not in ['other', 'python']:
+                guide_dict['category'].append(guide.category.upper())
+            else:
+                guide_dict['category'].append(guide.category.capitalize())
+            if owner.surname:
+                guide_dict['surname'] = ' ' + owner.surname
+            else:
+                guide_dict['surname'] = ''
+            if guide.images:
+                thething = ast.literal_eval(guide.images)[0]
+                imag = thething[22:]
+                bytedimage = base64.b64decode(imag)
+                image = pil.open(io.BytesIO(bytedimage))
+                if image.width / image.height > 250 / 300:
+                    image = image.crop((0, 0, 250 / 300 * image.height, image.height))
+                elif image.width / image.height < 250 / 300:
+                    image = image.crop((0, 0, image.width, 250 / 300 * image.width))
+                image_result = io.BytesIO()
+                image.save(image_result, format='PNG')
+                guide_dict['images'] = thething[:22] + base64.b64encode(image_result.getvalue()).decode()
+            else:
+                guide_dict['images'] = []
+            guides_list.append(guide_dict)
+        db_sess.close()
+    return render_template('lms_html/search.html', guides=guides_list, inputter=inputter)
 
 
 def main():

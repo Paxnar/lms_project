@@ -65,6 +65,7 @@ align-items: center;">Выйти</a></li>
         <nav class="menu">
             <ul>
                 <li><a href="/" class="nav_icons"><img src="{{url_for('static', filename='/images/navbar_home_icon_act.png')}}" alt="" class="nav_icons nav_home"></a></li>
+                <li><a href="/search" class="nav_icons"><img src="{{url_for('static', filename='/images/search.png')}}" alt="" class="nav_icons nav_search"></a></li>
                 <li><a href="/create_guide" class="nav_icons"><img src="{{url_for('static', filename='/images/navbar_edit_icon_nonact.png')}}" alt="" class="nav_icons nav_edit"></a></li>
                 {% if current_user.is_authenticated %}
                 {% if current_user.id == 1 %}
@@ -79,11 +80,11 @@ align-items: center;">Выйти</a></li>
               <a class="card" href='/guide/{{ guide["id"] }}' style="text-decoration: none;">
                 <div class="card__content">
                   <h3 class="card__header">{{ guide['category'][1] }}</h3>
-                  <h3 class="card__header">{{ guide['title'] }}</h3>
+                  <h3 class="card__header" style="word-break: break-word;">{{ guide['title'] }}</h3>
                   <p class="card__info" style="word-break: break-word;">
                     {{ guide['text']}}
                   </p>
-                  {% if current_user.id == 1 or current_user.is_mod %}
+                  {% if current_user.id == 1 or current_user.is_mod or current_user.id == guide['o_id'] %}
                   <form action="/delete/{{guide['id']}}">
                   <button type="submit" class="delete">Удалить</button>
                   </form>
