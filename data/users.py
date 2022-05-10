@@ -18,6 +18,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     phone = sqlalchemy.Column(sqlalchemy.String(65534))
     country = sqlalchemy.Column(sqlalchemy.String(65534))
     language = sqlalchemy.Column(sqlalchemy.String(65534))
+    is_mod = sqlalchemy.Column(sqlalchemy.Boolean, default=False, nullable=False)
     profile_image = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("profiles.id"))
     profile_relation = orm.relation('ProfileImage')
 
